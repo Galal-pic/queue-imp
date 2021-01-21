@@ -1,17 +1,59 @@
-#include<bits/stdc++.h>
-using namespace std;
-#define Maxsize 10000
-struct QuqueNode
+#include "../include/queue.h"
+#ifdef ARRAY_BASED_QUEUE
+void new_Queue(Queue *q)
 {
-    int  value ;
-    QuqueNode* Next ;
-};
-struct Quque
+    q->_front= 0;
+    q->_rear= -1;
+    q->_count=  0;
+}
+bool isempty(Queue* q)
 {
-    QuqueNode* _front ;
-    QuqueNode* _rear ;
-    int _size ;
-};
+    if(q->_count==0)
+        return true;
+    return false;
+}
+bool isfull(Queue* q)
+{
+    if(q->_count==Maxsize)
+        return true;
+    return false;
+}
+int QueueSiz(Queue* q)
+{
+    return q->_count;
+}
+/// push element
+void enqueue (int  ele, Queue* q)
+{
+    q->_rear = (q->_rear +1 ) % Maxsize;
+    q->arr[q->_rear] = ele;
+    /// +1
+    q->_count++;
+}
+///pop element
+void dequeue(int *pe, Queue* q)
+{
+    *pe = q->arr[q->_front];
+    q->_front = (q->_front + 1 ) % Maxsize;
+    /// -1
+    q->_count--;
+}
+void ClearQueue(Queue *q)
+{
+    q->_front = 0;
+    q->_rear = -1;
+    q->_count = 0;
+}
+void TraverseQueue(Queue *QueuePtr, void(*pf)(int))
+{
+    int pos, size;
+    for (pos = QueuePtr->_front, size = 0; size < QueuePtr->_count; size++)
+    {
+        (*pf)(QueuePtr->arr[pos]);
+        pos = (pos + 1) % Maxsize;
+    }
+}
+#else
 void new_queue(Quque *quque)
 {
     quque->_front = NULL ;
@@ -85,14 +127,4 @@ void show (int  value )
 {
     cout<<value<<endl;
 }
-int main()
-{
-    Quque q ;
-    new_queue(&q) ;
-    enqueu(&q, 5) ;
-    enqueu(&q, 6) ;
-    enqueu(&q, 7) ;
-    cout<<_deque(&q)<<endl;
-    traverse(&q, show) ;
-    return 0;
-}
+#endif
